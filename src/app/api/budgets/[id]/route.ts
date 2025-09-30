@@ -5,13 +5,14 @@ import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 
 interface RouteParams {
-  params: {
+  params: Promise<{
     id: string
-  }
+  }>
 }
 
 export async function GET(req: NextRequest, { params }: RouteParams) {
   try {
+    const resolvedParams = await params
     const session = await getServerSession(authOptions)
 
     if (!session?.user?.id) {
@@ -20,7 +21,7 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
 
     const budget = await (prisma as any).budget.findFirst({
       where: {
-        id: params.id,
+        id: resolvedParams.id,
         userId: session.user.id,
       },
       include: {
@@ -47,6 +48,7 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
 
 export async function PUT(req: NextRequest, { params }: RouteParams) {
   try {
+    const resolvedParams = await params
     const session = await getServerSession(authOptions)
 
     if (!session?.user?.id) {
@@ -65,7 +67,7 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
     // Verify the budget belongs to the user
     const existingBudget = await (prisma as any).budget.findFirst({
       where: {
-        id: params.id,
+        id: resolvedParams.id,
         userId: session.user.id,
       },
     })
@@ -97,7 +99,7 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
       where: {
         categoryId,
         userId: session.user.id,
-        NOT: { id: params.id },
+        NOT: { id: resolvedParams.id },
       },
     })
 
@@ -110,7 +112,7 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
 
     const budget = await (prisma as any).budget.update({
       where: {
-        id: params.id,
+        id: resolvedParams.id,
       },
       data: {
         categoryId,
@@ -135,6 +137,7 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
 
 export async function DELETE(req: NextRequest, { params }: RouteParams) {
   try {
+    const resolvedParams = await params
     const session = await getServerSession(authOptions)
 
     if (!session?.user?.id) {
@@ -144,7 +147,7 @@ export async function DELETE(req: NextRequest, { params }: RouteParams) {
     // Verify the budget belongs to the user
     const existingBudget = await (prisma as any).budget.findFirst({
       where: {
-        id: params.id,
+        id: resolvedParams.id,
         userId: session.user.id,
       },
     })
@@ -158,7 +161,7 @@ export async function DELETE(req: NextRequest, { params }: RouteParams) {
 
     await (prisma as any).budget.delete({
       where: {
-        id: params.id,
+        id: resolvedParams.id,
       },
     })
 

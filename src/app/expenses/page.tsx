@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, Suspense } from "react"
 import { useSession } from "next-auth/react"
 import { useRouter, useSearchParams } from "next/navigation"
 import DashboardHeader from "@/components/dashboard/DashboardHeader"
@@ -13,7 +13,7 @@ interface Category {
   color: string
 }
 
-export default function Expenses() {
+function ExpensesContent() {
   const { data: session, status } = useSession()
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -248,5 +248,13 @@ export default function Expenses() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function Expenses() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ExpensesContent />
+    </Suspense>
   )
 }

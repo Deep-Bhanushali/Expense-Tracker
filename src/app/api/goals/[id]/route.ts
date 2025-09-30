@@ -5,9 +5,10 @@ import { prisma } from "@/lib/prisma"
 
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const resolvedParams = await params
     const session = await getServerSession(authOptions)
 
     if (!session?.user?.id) {
@@ -33,7 +34,7 @@ export async function PUT(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const goal = await (prisma as any).goal.findFirst({
       where: {
-        id: params.id,
+        id: resolvedParams.id,
         userId: session.user.id,
       },
     })
@@ -47,7 +48,7 @@ export async function PUT(
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const updatedGoal = await (prisma as any).goal.update({
-      where: { id: params.id },
+      where: { id: resolvedParams.id },
       data: {
         title,
         description: description || null,
@@ -71,9 +72,10 @@ export async function PUT(
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const resolvedParams = await params
     const session = await getServerSession(authOptions)
 
     if (!session?.user?.id) {
@@ -83,7 +85,7 @@ export async function DELETE(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const goal = await (prisma as any).goal.findFirst({
       where: {
-        id: params.id,
+        id: resolvedParams.id,
         userId: session.user.id,
       },
     })
@@ -97,7 +99,7 @@ export async function DELETE(
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await (prisma as any).goal.delete({
-      where: { id: params.id },
+      where: { id: resolvedParams.id },
     })
 
     return NextResponse.json({ message: "Goal deleted successfully" })

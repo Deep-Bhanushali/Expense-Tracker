@@ -4,13 +4,14 @@ import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 
 interface RouteParams {
-  params: {
+  params: Promise<{
     id: string
-  }
+  }>
 }
 
 export async function GET(req: NextRequest, { params }: RouteParams) {
   try {
+    const resolvedParams = await params
     const session = await getServerSession(authOptions)
 
     if (!session?.user?.id) {
@@ -19,7 +20,7 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
 
     const expense = await prisma.expense.findFirst({
       where: {
-        id: params.id,
+        id: resolvedParams.id,
         userId: session.user.id,
       },
       include: {
@@ -46,6 +47,7 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
 
 export async function PUT(req: NextRequest, { params }: RouteParams) {
   try {
+    const resolvedParams = await params
     const session = await getServerSession(authOptions)
 
     if (!session?.user?.id) {
@@ -64,7 +66,7 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
     // Verify the expense belongs to the user
     const existingExpense = await prisma.expense.findFirst({
       where: {
-        id: params.id,
+        id: resolvedParams.id,
         userId: session.user.id,
       },
     })
@@ -93,7 +95,7 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
 
     const expense = await prisma.expense.update({
       where: {
-        id: params.id,
+        id: resolvedParams.id,
       },
       data: {
         description,
@@ -118,6 +120,7 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
 
 export async function DELETE(req: NextRequest, { params }: RouteParams) {
   try {
+    const resolvedParams = await params
     const session = await getServerSession(authOptions)
 
     if (!session?.user?.id) {
@@ -127,7 +130,7 @@ export async function DELETE(req: NextRequest, { params }: RouteParams) {
     // Verify the expense belongs to the user
     const existingExpense = await prisma.expense.findFirst({
       where: {
-        id: params.id,
+        id: resolvedParams.id,
         userId: session.user.id,
       },
     })
@@ -141,7 +144,7 @@ export async function DELETE(req: NextRequest, { params }: RouteParams) {
 
     await prisma.expense.delete({
       where: {
-        id: params.id,
+        id: resolvedParams.id,
       },
     })
 

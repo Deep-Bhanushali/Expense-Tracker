@@ -4,13 +4,14 @@ import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 
 interface RouteParams {
-  params: {
+  params: Promise<{
     id: string
-  }
+  }>
 }
 
 export async function GET(req: NextRequest, { params }: RouteParams) {
   try {
+    const resolvedParams = await params
     const session = await getServerSession(authOptions)
 
     if (!session?.user?.id) {
@@ -19,7 +20,7 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
 
     const category = await prisma.category.findFirst({
       where: {
-        id: params.id,
+        id: resolvedParams.id,
         userId: session.user.id,
       },
     })
@@ -43,6 +44,7 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
 
 export async function PUT(req: NextRequest, { params }: RouteParams) {
   try {
+    const resolvedParams = await params
     const session = await getServerSession(authOptions)
 
     if (!session?.user?.id) {
@@ -61,7 +63,7 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
     // Verify the category belongs to the user
     const existingCategory = await prisma.category.findFirst({
       where: {
-        id: params.id,
+        id: resolvedParams.id,
         userId: session.user.id,
       },
     })
@@ -78,7 +80,7 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
       where: {
         name: name.toLowerCase(),
         userId: session.user.id,
-        NOT: { id: params.id },
+        NOT: { id: resolvedParams.id },
       },
     })
 
@@ -91,7 +93,7 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
 
     const category = await prisma.category.update({
       where: {
-        id: params.id,
+        id: resolvedParams.id,
       },
       data: {
         name: name.toLowerCase(),
@@ -113,6 +115,7 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
 
 export async function DELETE(req: NextRequest, { params }: RouteParams) {
   try {
+    const resolvedParams = await params
     const session = await getServerSession(authOptions)
 
     if (!session?.user?.id) {
@@ -122,7 +125,7 @@ export async function DELETE(req: NextRequest, { params }: RouteParams) {
     // Verify the category belongs to the user
     const existingCategory = await prisma.category.findFirst({
       where: {
-        id: params.id,
+        id: resolvedParams.id,
         userId: session.user.id,
       },
     })
@@ -136,7 +139,7 @@ export async function DELETE(req: NextRequest, { params }: RouteParams) {
 
     await prisma.category.delete({
       where: {
-        id: params.id,
+        id: resolvedParams.id,
       },
     })
 
