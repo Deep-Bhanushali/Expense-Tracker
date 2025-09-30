@@ -62,7 +62,7 @@ code
 Bash
 cp .env.example .env
 Now, fill in the .env file with your database URL and NextAuth.js credentials:
-code
+```
 Env
 # This was inserted by `prisma init`:
 # Environment variables declared in this file are automatically made available to Prisma.
@@ -78,10 +78,11 @@ NEXTAUTH_URL="http://localhost:3000"
 # Add your authentication providers here (e.g., GitHub, Google)
 # GITHUB_ID=
 # GITHUB_SECRET=
+```
 4. Push the Database Schema
 Run the Prisma command to sync your schema with your database:
-code
-Bash
+
+```Bash
 npx prisma db push
 (Optional) If you want to seed the database with initial categories, you can use Prisma's seed feature.
 code
@@ -93,6 +94,7 @@ code
 Bash
 npm run dev
 Open http://localhost:3000 with your browser to see the result.
+```
 🤝 Contributing
 Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are greatly appreciated.
 If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
