@@ -97,7 +97,7 @@ code
 npm run dev
 Open http://localhost:3000 with your browser to see the result.
 ```
-🤝 Contributing
+## 🤝 Contributing
 Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are greatly appreciated.
 If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
 Fork the Project
@@ -105,7 +105,7 @@ Create your Feature Branch (git checkout -b feature/AmazingFeature)
 Commit your Changes (git commit -m 'Add some AmazingFeature')
 Push to the Branch (git push origin feature/AmazingFeature)
 Open a Pull Request
-📜 License
+##📜 License
 Distributed under the MIT License. See LICENSE.txt for more information.
 📬 Contact
 Deep Bhanushali - @your_twitter_handle - your-email@example.com
