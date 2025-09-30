@@ -54,6 +54,8 @@ npm install
 pnpm install
 # or
 yarn install
+
+```
 3. Set Up Environment Variables
 Create a .env file in the root of the project by copying the example file:
 code
