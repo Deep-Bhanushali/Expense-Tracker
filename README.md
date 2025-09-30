@@ -84,14 +84,16 @@ Run the Prisma command to sync your schema with your database:
 
 ```Bash
 npx prisma db push
+```
 (Optional) If you want to seed the database with initial categories, you can use Prisma's seed feature.
 code
-Bash
+```Bash
 npx prisma db seed
+```
 5. Run the Development Server
 Start the application:
 code
-Bash
+```Bash
 npm run dev
 Open http://localhost:3000 with your browser to see the result.
 ```
