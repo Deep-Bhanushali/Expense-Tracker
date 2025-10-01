@@ -108,8 +108,8 @@ export default function DashboardHeader({ user }: DashboardHeaderProps) {
               </button>
             </div>
           </div>
-          <div className="flex items-center space-x-3">
-            <span className="hidden sm:inline text-sm text-gray-700 truncate">
+          <div className="hidden md:flex items-center space-x-3">
+            <span className="text-sm text-gray-700 truncate">
               {user?.name || user?.email}
             </span>
             <button
@@ -167,10 +167,18 @@ export default function DashboardHeader({ user }: DashboardHeaderProps) {
               >
                 Goals
               </Link>
-              {/* Mobile User Info */}
+              {/* Mobile User Info and Sign Out */}
               <div className="border-t pt-2 mt-2">
-                <div className="px-3 py-2 text-sm text-gray-500 truncate">
-                  {user?.name || user?.email}
+                <div className="px-3 py-2 flex flex-col space-y-2">
+                  <div className="text-sm text-gray-500 truncate">
+                    {user?.name || user?.email}
+                  </div>
+                  <button
+                    onClick={() => signOut({ callbackUrl: "/" })}
+                    className="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 rounded-md text-sm font-medium w-full text-left"
+                  >
+                    Sign Out
+                  </button>
                 </div>
               </div>
             </nav>
