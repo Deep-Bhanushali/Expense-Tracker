@@ -26,7 +26,6 @@ export async function sendEmailNotification({
   userEmail,
   budgetName,
   categoryName,
-  budgetAmount,
   totalSpent,
   percentage,
   threshold,
