@@ -1,7 +1,5 @@
-import { PrismaClient } from '@prisma/client';
 import { sendBudgetNotification, BudgetNotificationData } from './notifications';
-
-const prisma = new PrismaClient();
+import { prisma } from './prisma';
 
 interface BudgetProgressResult {
   budget: {
@@ -161,8 +159,6 @@ export async function checkAllBudgets() {
   } catch (error) {
     console.error('Error checking budgets:', error);
     throw error;
-  } finally {
-    await prisma.$disconnect();
   }
 }
 
