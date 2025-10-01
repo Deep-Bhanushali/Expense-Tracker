@@ -4,6 +4,7 @@ import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 
 interface User {
   id: string;
@@ -109,9 +110,26 @@ export default function DashboardHeader({ user }: DashboardHeaderProps) {
             </div>
           </div>
           <div className="hidden md:flex items-center space-x-3">
-            <span className="text-sm text-gray-700 truncate">
-              {user?.name || user?.email}
-            </span>
+            <Link
+              href="/profile"
+              className="flex items-center space-x-2 text-sm text-gray-700 truncate hover:text-indigo-600 transition-colors duration-200"
+              title="Go to Profile"
+            >
+              {user?.image ? (
+                <Image
+                  src={user.image}
+                  alt="Avatar"
+                  width={24}
+                  height={24}
+                  className="rounded-full bg-gray-200"
+                />
+              ) : (
+                <span className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center text-xs text-white font-medium">
+                  {user?.name?.charAt(0).toUpperCase() || '?'}
+                </span>
+              )}
+              <span>{user?.name || user?.email}</span>
+            </Link>
             <button
               onClick={() => signOut({ callbackUrl: "/" })}
               className="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 rounded-md text-sm font-medium"
@@ -170,8 +188,21 @@ export default function DashboardHeader({ user }: DashboardHeaderProps) {
               {/* Mobile User Info and Sign Out */}
               <div className="border-t pt-2 mt-2">
                 <div className="px-3 py-2 flex flex-col space-y-2">
-                  <div className="text-sm text-gray-500 truncate">
-                    {user?.name || user?.email}
+                  <div className="flex items-center space-x-2 text-sm text-gray-500 truncate">
+                    {user?.image ? (
+                      <Image
+                        src={user.image}
+                        alt="Avatar"
+                        width={20}
+                        height={20}
+                        className="rounded-full bg-gray-200"
+                      />
+                    ) : (
+                      <span className="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center text-xs text-white font-medium">
+                        {user?.name?.charAt(0).toUpperCase() || '?'}
+                      </span>
+                    )}
+                    <span>{user?.name || user?.email}</span>
                   </div>
                   <button
                     onClick={() => signOut({ callbackUrl: "/" })}

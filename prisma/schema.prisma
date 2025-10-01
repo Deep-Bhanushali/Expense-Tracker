@@ -18,6 +18,7 @@ model User {
   name      String
   email     String   @unique
   password  String
+  image     String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -25,6 +26,7 @@ model User {
   expenses   Expense[]
   budgets    Budget[]
   goals      Goal[]
+  thresholds NotificationThreshold[]
 
   @@map("users")
 }
@@ -78,7 +80,44 @@ model Budget {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  thresholds NotificationThreshold[]
+
   @@map("budgets")
+}
+
+model NotificationThreshold {
+  id         String @id @default(cuid())
+  budgetId   String
+  threshold  Int    // Percentage (1-100)
+  type       String @default("email") // Only email supported
+  enabled    Boolean @default(true)
+  userId     String
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  budget Budget @relation(fields: [budgetId], references: [id], onDelete: Cascade)
+
+  notifications Notification[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("notification_thresholds")
+}
+
+model Notification {
+  id                     String @id @default(cuid())
+  notificationThresholdId String
+  sentAt                 DateTime
+  type                   String // 'email'
+  status                 String // 'sent', 'failed'
+  messageId              String? // For tracking email
+  content                String
+
+  threshold NotificationThreshold @relation(fields: [notificationThresholdId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@map("notifications")
 }
 
 model Goal {
